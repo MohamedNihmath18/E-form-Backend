@@ -1,4 +1,3 @@
-// eform-backend/models/Form.js
 const mongoose = require('mongoose');
 
 const formSchema = new mongoose.Schema({

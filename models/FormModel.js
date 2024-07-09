@@ -1,5 +1,3 @@
-// FormModel.js
-
 const mongoose = require('mongoose');
 
 // Define schema for form data
@@ -35,6 +33,6 @@ const FormSchema = new mongoose.Schema({
 });
 
 // Create model from schema
-const Form = mongoose.model('Formmodel', FormSchema);
+const FormModel = mongoose.model('FormModel', FormSchema);
 
-module.exports = Form;
+module.exports = FormModel;

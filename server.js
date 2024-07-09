@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const nodemailer = require('nodemailer');
-const Form = require('./models/FormModel'); // Assuming correct path to FormModel
+const Form = require('./models/FormModel'); // Ensure the correct path to FormModel
 
 dotenv.config();
 
