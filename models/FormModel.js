@@ -15,7 +15,7 @@ const FormSchema = new mongoose.Schema({
     idCreation: [
         {
             no: { type: Number, required: true },
-            idCreation: { type: String, required: true },
+            idCreation: { type: String, required: true ,},
             yes: { type: Boolean, default: false },
             remark: { type: String }
         }

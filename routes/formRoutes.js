@@ -73,6 +73,7 @@ router.post('/', async (req, res) => {
 
         res.json(newForm);
     } catch (err) {
+        console.error(err);
         res.status(500).json({ error: 'Server error' });
     }
 });
@@ -86,6 +87,7 @@ router.get('/:id', async (req, res) => {
         }
         res.json(form);
     } catch (err) {
+        console.error(err);
         res.status(500).json({ error: 'Server error' });
     }
 });
