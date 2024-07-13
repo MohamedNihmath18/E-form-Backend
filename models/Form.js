@@ -6,26 +6,17 @@ const formSchema = new mongoose.Schema({
     effectiveDate: Date,
     effectiveUntil: Date,
     department: String,
-    accessRights: {
-        new: Boolean,
-        change: Boolean,
-        blockInactive: Boolean
-    },
-    idCreation: [{
-        no: Number,
-        idCreation: String,
-        yes: Boolean,
-        remark: String
-    }],
+    idCreation: [
+        {
+            name: String,
+            yes: Boolean,
+            no: Boolean,
+            remark: String
+        }
+    ],
     remarks: String,
-    requestedBy: {
-        name: String,
-        email: String
-    },
-    approvedBy: {
-        name: String,
-        email: String
-    },
+    requestedByName: String,
+    requestedByEmail: String,
     status: {
         type: String,
         enum: ['Pending', 'Approved', 'Rejected'],
