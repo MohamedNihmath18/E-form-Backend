@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { createForm, getForm, updateFormStatus } = require('../controllers/formsController');
+const { createForm, getForm, updateFormStatus } = require('../controllers/formController');
 
 router.post('/', createForm);
 router.get('/:id', getForm);
