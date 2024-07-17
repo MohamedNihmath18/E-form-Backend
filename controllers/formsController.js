@@ -50,6 +50,10 @@ const updateFormStatus = async (req, res) => {
   try {
     const form = await Form.findByIdAndUpdate(req.params.id, { status: req.body.status }, { new: true });
 
+    if (!form) {
+      return res.status(404).json({ message: 'Form not found' });
+    }
+
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -117,20 +121,23 @@ const updateFormStatus = async (req, res) => {
 
     transporter.sendMail(userMailOptions, (error, info) => {
       if (error) {
-        return console.log(error);
+        console.error('Error sending user email:', error);
+        return res.status(500).json({ message: 'Error sending user email' });
       }
       console.log('User email sent: ' + info.response);
     });
 
     transporter.sendMail(itMailOptions, (error, info) => {
       if (error) {
-        return console.log(error);
+        console.error('Error sending IT email:', error);
+        return res.status(500).json({ message: 'Error sending IT email' });
       }
       console.log('IT email sent: ' + info.response);
     });
 
     res.json(form);
   } catch (error) {
+    console.error('Error updating form status:', error);
     res.status(500).json({ message: error.message });
   }
 };
