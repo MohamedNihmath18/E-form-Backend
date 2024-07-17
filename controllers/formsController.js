@@ -48,11 +48,13 @@ const getForm = async (req, res) => {
 
 const updateFormStatus = async (req, res) => {
   try {
-    const form = await Form.findByIdAndUpdate(req.params.id, { status: req.body.status }, { new: true });
-
+    const form = await Form.findById(req.params.id);
     if (!form) {
       return res.status(404).json({ message: 'Form not found' });
     }
+
+    form.status = req.body.status;
+    await form.save();
 
     const transporter = nodemailer.createTransport({
       service: 'gmail',
