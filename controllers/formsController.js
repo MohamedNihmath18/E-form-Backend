@@ -62,7 +62,7 @@ const updateFormStatus = async (req, res) => {
       },
     });
 
-    const logoUrl = 'https://your-logo-url.com/logo.png'; // Replace with your actual logo URL
+    const logoUrl = 'https://www.mahsahospital.com/wp-content/uploads/2019/11/mahsa-logo.png'; // Replace with your actual logo URL
 
     const formHtml = `
       <div style="font-family: Arial, sans-serif; line-height: 1.5;">
@@ -106,7 +106,7 @@ const updateFormStatus = async (req, res) => {
         <p><strong>Remarks (for IT Department):</strong> ${form.remarks}</p>
         <p><strong>Requested By (Name):</strong> ${form.requestedByName}</p>
         <p><strong>Requested By (Email):</strong> ${form.requestedByEmail}</p>
-        <h2>Status: ${req.body.status}</h2>
+        <h2>Status: ${req.body.status.charAt(0).toUpperCase() + req.body.status.slice(1)}</h2>
       </div>
     `;
 
@@ -118,7 +118,7 @@ const updateFormStatus = async (req, res) => {
     };
 
     const itMailOptions = {
-      from: form.approverEmail, // Set the from address to the approver's email
+      from: req.body.approverEmail, // Set the from address to the approver's email
       to: process.env.IT_DEPARTMENT_EMAIL,
       subject: `Form ${req.body.status}`,
       html: `<p>A form has been ${req.body.status}.</p>${formHtml}`
