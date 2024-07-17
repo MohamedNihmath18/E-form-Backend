@@ -15,7 +15,7 @@ const createForm = async (req, res) => {
     });
 
     const mailOptions = {
-      from: process.env.EMAIL,
+      from: req.body.requestedByEmail, // Set the from address to the requester's email
       to: req.body.approverEmail,
       subject: 'Approval Request',
       text: `Please approve the form by clicking the link: ${process.env.FRONTEND_URL}/approval/${form._id}`,
@@ -48,13 +48,11 @@ const getForm = async (req, res) => {
 
 const updateFormStatus = async (req, res) => {
   try {
-    const form = await Form.findById(req.params.id);
+    const form = await Form.findByIdAndUpdate(req.params.id, { status: req.body.status }, { new: true });
+
     if (!form) {
       return res.status(404).json({ message: 'Form not found' });
     }
-
-    form.status = req.body.status;
-    await form.save();
 
     const transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -64,13 +62,18 @@ const updateFormStatus = async (req, res) => {
       },
     });
 
+    const logoUrl = 'https://your-logo-url.com/logo.png'; // Replace with your actual logo URL
+
     const formHtml = `
-      <div>
-        <h1>Access Rights Requisition</h1>
+      <div style="font-family: Arial, sans-serif; line-height: 1.5;">
+        <div style="display: flex; align-items: center;">
+          <img src="${logoUrl}" alt="Logo" style="width: 50px; height: 50px; margin-right: 10px;">
+          <h1 style="color: #333;">Access Rights Requisition</h1>
+        </div>
         <p><strong>Name:</strong> ${form.name}</p>
         <p><strong>Designation:</strong> ${form.designation}</p>
-        <p><strong>Effective Date:</strong> ${form.effectiveDate}</p>
-        <p><strong>Effective Until:</strong> ${form.effectiveUntil}</p>
+        <p><strong>Effective Date:</strong> ${new Date(form.effectiveDate).toDateString()}</p>
+        <p><strong>Effective Until:</strong> ${new Date(form.effectiveUntil).toDateString()}</p>
         <p><strong>Department:</strong> ${form.department}</p>
         <p><strong>Access Rights:</strong></p>
         <ul>
@@ -78,9 +81,9 @@ const updateFormStatus = async (req, res) => {
           <li>Change: ${form.accessRights.change ? 'Yes' : 'No'}</li>
           <li>Block/Inactive: ${form.accessRights.blockInactive ? 'Yes' : 'No'}</li>
         </ul>
-        <table border="1">
+        <table border="1" cellspacing="0" cellpadding="10" style="border-collapse: collapse; width: 100%;">
           <thead>
-            <tr>
+            <tr style="background-color: #f2f2f2;">
               <th>No</th>
               <th>ID Creation</th>
               <th>Yes</th>
@@ -115,7 +118,7 @@ const updateFormStatus = async (req, res) => {
     };
 
     const itMailOptions = {
-      from: process.env.EMAIL,
+      from: form.approverEmail, // Set the from address to the approver's email
       to: process.env.IT_DEPARTMENT_EMAIL,
       subject: `Form ${req.body.status}`,
       html: `<p>A form has been ${req.body.status}.</p>${formHtml}`
