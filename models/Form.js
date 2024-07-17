@@ -1,27 +1,33 @@
 const mongoose = require('mongoose');
 
 const formSchema = new mongoose.Schema({
-    name: String,
-    designation: String,
-    effectiveDate: Date,
-    effectiveUntil: Date,
-    department: String,
-    idCreation: [
-        {
-            name: String,
-            yes: Boolean,
-            no: Boolean,
-            remark: String
-        }
-    ],
-    remarks: String,
-    requestedByName: String,
-    requestedByEmail: String,
-    status: {
-        type: String,
-        enum: ['Pending', 'Approved', 'Rejected'],
-        default: 'Pending'
+  name: { type: String, required: true },
+  designation: { type: String, required: true },
+  effectiveDate: { type: Date, required: true },
+  effectiveUntil: { type: Date, required: true },
+  department: { type: String, required: true },
+  accessRights: {
+    new: { type: Boolean, default: false },
+    change: { type: Boolean, default: false },
+    blockInactive: { type: Boolean, default: false }
+  },
+  idCreation: [
+    {
+      name: { type: String },
+      yes: { type: Boolean, default: false },
+      no: { type: Boolean, default: false },
+      remark: { type: String }
     }
+  ],
+  remarks: { type: String },
+  requestedByName: { type: String, required: true },
+  requestedByEmail: { type: String, required: true },
+  approverEmail: { type: String, required: true },
+  status: {
+    type: String,
+    enum: ['pending', 'approved', 'rejected'],
+    default: 'pending'
+  }
 });
 
 module.exports = mongoose.model('Form', formSchema);
